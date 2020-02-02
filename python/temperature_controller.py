@@ -16,10 +16,8 @@ DHT_SENSOR = Adafruit_DHT.DHT22
 SLEEP_DURATION_SECONDS = 2.0  # the DHT22 has a hardware frequency of 1Hz. Don't go below that here.
 DHT_PIN = 4  # this is the GPIO pin that the DHT22 is connected to. Make sure it represents the physical connection of the sensor.
 POWER_PIN = 14 # this is the GPIO pin that is connected to the power source
-POWER_PIN_STATE = False  # False means the power is off, True means it is on
 
-
-def toggle_power():
+def toggle_power(power_pin_state:bool):
 	'''
 	Turn the power on or off (reverse the current state)
 	'''
@@ -27,18 +25,18 @@ def toggle_power():
 	GPIO.setwarnings(False)
 	GPIO.setup(POWER_PIN,GPIO.OUT)
 
-	if POWER_PIN_STATE:
+	if power_pin_state:
 		# It is on, so turn off
 		GPIO.output(POWER_PIN,GPIO.LOW)
 	else:
 		# It is off, so turn on
 		GPIO.output(POWER_PIN,GPIO.HIGH)
 	
-	POWER_PIN_STATE = not POWER_PIN_STATE  # reverse state
+	power_pin_state = not power_pin_state  # reverse state
 
 	return
 
-def main(max_temp_c:float=24.0, min_temp_c:float=22.0):
+def main(max_temp_c:float=24.0, min_temp_c:float=22.0, power_pin_state:bool=False):
 	'''
 	Let's do this.
 	'''
@@ -46,12 +44,12 @@ def main(max_temp_c:float=24.0, min_temp_c:float=22.0):
 		humidity_perc, temperature_c = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
 		print('temp: {}, humidity: {}'.format(temperature_c, humidity_perc))
 
-		if temperature_c > max_temp_c and POWER_PIN_STATE:
+		if temperature_c > max_temp_c and power_pin_state:
 			# power is on and it should be turned off
-			toggle_power()
-		elif temperature_c < min_temp_c and not POWER_PIN_STATE:
+			toggle_power(power_pin_state)
+		elif temperature_c < min_temp_c and not power_pin_state:
 			# power is off and it should be turned on
-			toggle_power()
+			toggle_power(power_pin_state)
 
 		time.sleep(SLEEP_DURATION_SECONDS)
 

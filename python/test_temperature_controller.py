@@ -45,4 +45,6 @@ def get_temperature_c(current_room_temp_c:float):
     return current_room_temp_c
 
 if __name__ == "__main__":
+    tc.POWER_PIN_STATE = False
+    print(tc.POWER_PIN_STATE)    
     main(STARTING_ROOM_TEMPERATURE_C)

@@ -11,11 +11,13 @@ import Adafruit_DHT
 import RPi.GPIO as GPIO
 import time
 
-SLEEP_DURATION_SECONDS = 2.0  # the DHT22 has a hardware frequency of 1Hz. Don't go below that here.
 DHT_SENSOR = Adafruit_DHT.DHT22
+
+SLEEP_DURATION_SECONDS = 2.0  # the DHT22 has a hardware frequency of 1Hz. Don't go below that here.
 DHT_PIN = 4  # this is the GPIO pin that the DHT22 is connected to. Make sure it represents the physical connection of the sensor.
 POWER_PIN = 14 # this is the GPIO pin that is connected to the power source
 POWER_PIN_STATE = False  # False means the power is off, True means it is on
+
 
 def toggle_power():
 	'''
@@ -24,6 +26,7 @@ def toggle_power():
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setwarnings(False)
 	GPIO.setup(POWER_PIN,GPIO.OUT)
+
 	if POWER_PIN_STATE:
 		# It is on, so turn off
 		GPIO.output(POWER_PIN,GPIO.LOW)

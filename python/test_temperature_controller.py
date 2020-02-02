@@ -12,7 +12,7 @@ def main(starting_temp_c:float):
     '''
     Run the test
     '''
-    current_room_temp = starting_temp_c
+    current_room_temp_c = starting_temp_c
 
     while True:
         current_room_temp_c = get_temperature_c(current_room_temp_c)
@@ -20,10 +20,10 @@ def main(starting_temp_c:float):
 
         if current_room_temp_c > 24.0 and tc.POWER_PIN_STATE:
                 # power is on and it should be turned off
-                toggle_power()
+                tc.toggle_power()
         elif current_room_temp_c < 22.0 and not tc.POWER_PIN_STATE:
                 # power is off and it should be turned on
-                toggle_power()
+                tc.toggle_power()
 
         time.sleep(tc.SLEEP_DURATION_SECONDS)
 

@@ -13,29 +13,30 @@ def main(starting_temp_c:float):
     Run the test
     '''
     current_room_temp_c = starting_temp_c
+    power_pin_state = False
 
     while True:
-        current_room_temp_c = get_temperature_c(current_room_temp_c)
+        current_room_temp_c = get_temperature_c(current_room_temp_c, power_pin_state)
         print('temp: {}'.format(current_room_temp_c))
 
-        if current_room_temp_c > 24.0 and tc.POWER_PIN_STATE:
+        if current_room_temp_c > 24.0 and power_pin_state:
                 # power is on and it should be turned off
-                tc.toggle_power()
-        elif current_room_temp_c < 22.0 and not tc.POWER_PIN_STATE:
+                power_pin_state = tc.toggle_power(power_pin_state)
+        elif current_room_temp_c < 22.0 and not power_pin_state:
                 # power is off and it should be turned on
-                tc.toggle_power()
+                power_pin_state = tc.toggle_power(power_pin_state)
 
         time.sleep(tc.SLEEP_DURATION_SECONDS)
 
     return
 
-def get_temperature_c(current_room_temp_c:float):
+def get_temperature_c(current_room_temp_c:float, power_pin_state:bool):
     '''
     Use a simple model to return a temperature.
     '''
     modeled_temperature_rate = 0.01 # deg/sec
 
-    if tc.POWER_PIN_STATE:
+    if power_pin_state:
         # the power is on, so increase the room temp
         current_room_temp_c += modeled_temperature_rate*tc.SLEEP_DURATION_SECONDS
     else:
@@ -45,6 +46,4 @@ def get_temperature_c(current_room_temp_c:float):
     return current_room_temp_c
 
 if __name__ == "__main__":
-    tc.POWER_PIN_STATE = False
-    print(tc.POWER_PIN_STATE)    
     main(STARTING_ROOM_TEMPERATURE_C)

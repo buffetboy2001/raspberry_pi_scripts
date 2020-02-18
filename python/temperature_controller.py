@@ -34,7 +34,7 @@ def toggle_power(power_pin_state:bool):
 	
 	power_pin_state = not power_pin_state  # reverse state
 
-	return
+	return power_pin_state
 
 def main(max_temp_c:float=24.0, min_temp_c:float=22.0, power_pin_state:bool=False):
 	'''
